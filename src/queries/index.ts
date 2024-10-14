@@ -10,3 +10,15 @@ export const getAllPeopleQuery = gql`
     }
   }
 `;
+
+export const getByPersonId = gql`
+  query GetPersonById($personId: ID!) {
+    person(id: $personId) {
+      name
+      birthYear
+      species {
+        averageHeight
+      }
+    }
+  }
+`;
