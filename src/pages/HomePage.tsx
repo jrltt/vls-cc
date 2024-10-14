@@ -1,13 +1,11 @@
 import { gql, useQuery } from "urql";
 
 const query = gql`
-  query Home {
+  query GetAllPeople {
     allPeople {
-      edges {
-        node {
-          id
-          name
-        }
+      people {
+        id
+        name
       }
     }
   }
@@ -15,8 +13,14 @@ const query = gql`
 
 const HomePage = () => {
   const [data] = useQuery({ query });
+  console.log(data);
 
-  return <div>Home</div>;
+  return (
+    <div>
+      Home
+      <pre>{JSON.stringify(data.data?.allPeople?.people, null, 2)}</pre>
+    </div>
+  );
 };
 
 export default HomePage;
