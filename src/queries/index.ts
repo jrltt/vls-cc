@@ -19,6 +19,14 @@ export const getByPersonId = gql`
       species {
         averageHeight
       }
+      filmConnection {
+        edges {
+          node {
+            producers
+            title
+          }
+        }
+      }
     }
   }
 `;
