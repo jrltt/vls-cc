@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { createClient, Provider } from "urql";
+import "./index.css";
 import HomePage from "./pages/HomePage";
 import PersonPage from "./pages/PersonPage";
 import { getByPersonId } from "./queries";
