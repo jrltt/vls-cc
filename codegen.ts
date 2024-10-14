@@ -6,11 +6,14 @@ const config: CodegenConfig = {
   overwrite: true,
   generates: {
     "src/generated/graphql.ts": {
-      plugins: [{
-        typescript: {
-          noExport: true,
+      plugins: [
+        {
+          typescript: {
+            noExport: true,
+          },
         },
-      }, "typescript-operations"],
+        "typescript-operations",
+      ],
     },
   },
 };
