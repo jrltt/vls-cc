@@ -1,21 +1,64 @@
-# React + TypeScript + Vite
+# Code Test
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Assignment
 
-While this project uses React, Vite supports many popular JS frameworks. [See all the supported frameworks](https://vitejs.dev/guide/#scaffolding-your-first-vite-project).
+The application is setup with React Router containing two routes. The goal of
+the assignement is to create these two pages based on the mockups mentioned in
+each page section.
 
-## Deploy Your Own
+The data is fetched from
+[Star Wars API](https://studio.apollographql.com/public/star-wars-swapi/home?variant=current)
+with the already setup [urql](https://formidable.com/open-source/urql/) client.
 
-Deploy your own Vite project with Vercel.
+The styling method is free of choice, it could be with css, scss, css-in-js or
+other preferences.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vercel/vercel/tree/main/examples/vite-react&template=vite-react)
+- `/` - the home page
+- `/person/:personId` - the person page
 
-_Live Example: https://vite-react-example.vercel.app_
+### Home page
 
-### Deploying From Your Terminal
+This page should list all the people from the Star Wars API. Each person should
+be linked to its own page.
 
-You can deploy your new Vite project with a single command from your terminal using [Vercel CLI](https://vercel.com/download):
+![home](./docs/home.png)
 
-```shell
-$ vercel
+### Person page
+
+This page should contain overview of the player
+
+- List of producers the person has worked with and how many times.
+- Birth year
+- Person species average height.
+- Paginated list of person films containing:
+  - Title.
+  - Release Date.
+  - Number of planets without water in the film.
+
+![person](./docs/person.png)
+
+## Setup
+
+Install dependencies (using NPM)
+
+```bash
+$ npm run install
+```
+
+Download GraphQL Schema
+
+```bash
+$ npm run download-schema
+```
+
+Generate GraphQL Types (generated types will be in `src/generated/graphql.ts`
+
+```bash
+$ npm run codegen
+```
+
+Start dev mode
+
+```bash
+$ npm run dev
 ```
