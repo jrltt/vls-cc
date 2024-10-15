@@ -1,17 +1,25 @@
-import { GetAllPeopleQuery } from "@/generated/graphql";
+import { GetAllPeoplePaginatedQuery } from "@/generated/graphql";
 import { graphqlClient } from "@/lib/graphql-client";
-import { getAllPeopleQuery } from "@/queries";
+import { getAllPeopleQueryPaginated } from "@/queries";
 import { defer } from "react-router-dom";
 
-type AllPeople = Pick<GetAllPeopleQuery, "allPeople">;
+type AllPeople = Pick<GetAllPeoplePaginatedQuery, "allPeople">;
+type PageInfo = NonNullable<
+  NonNullable<GetAllPeoplePaginatedQuery["allPeople"]>["pageInfo"]
+>;
 
 export async function loadAllPeople() {
   const { data } = await graphqlClient
-    .query<GetAllPeopleQuery>(getAllPeopleQuery, {})
+    .query<GetAllPeoplePaginatedQuery>(getAllPeopleQueryPaginated, {
+      first: 9,
+      cursor: null,
+    })
     .toPromise();
 
   const { allPeople } = data as AllPeople;
-  const people = allPeople?.people ?? {};
+  const pageInfo = allPeople?.pageInfo as PageInfo;
+  const totalCount = allPeople?.totalCount ?? 0;
+  const people = allPeople?.edges ?? {};
 
-  return defer({ people });
+  return defer({ people, pageInfo, totalCount });
 }
