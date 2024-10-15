@@ -6,6 +6,10 @@ export const getAllPeopleQuery = gql`
       people {
         id
         name
+        gender
+        homeworld {
+          name
+        }
       }
     }
   }
