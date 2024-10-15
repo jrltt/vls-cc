@@ -13,28 +13,18 @@ type People = NonNullable<
 type PageInfo = NonNullable<
   NonNullable<GetAllPeoplePaginatedQuery["allPeople"]>["pageInfo"]
 >;
-
-const HomePage = () => {
-  const data = useLoaderData() as { people: People[]; pageInfo: PageInfo };
-
-  console.log(data);
-
-  return (
-    <div className="container mx-auto">
-      Home
-      <Suspense fallback={<p>Loading...</p>}>
-        <Await resolve={data}>
-          <HomeCard />
-        </Await>
-      </Suspense>
-    </div>
-  );
+type LoaderPeopleData = {
+  people: People[];
+  pageInfo: PageInfo;
+  totalCount: number;
 };
 
-function useHomeCardData(asyncData: { people: People[]; pageInfo: PageInfo }) {
-  const [cursor, setCursor] = useState<string | null>(null);
+const useHomeCard = (asyncData: LoaderPeopleData) => {
   const [people, setPeople] = useState<People[]>(asyncData.people);
-  let [{ data, fetching, error }] = useQuery({
+  const [pageInfo, setPageInfo] = useState<PageInfo>(asyncData.pageInfo);
+  const [cursor, setCursor] = useState<string | null>(null);
+
+  const [{ data, fetching, error }] = useQuery({
     pause: !cursor,
     query: getAllPeopleQueryPaginated,
     variables: {
@@ -49,40 +39,49 @@ function useHomeCardData(asyncData: { people: People[]; pageInfo: PageInfo }) {
         ...prevPeople,
         ...data.allPeople?.edges.map((edge: any) => edge),
       ]);
+      setPageInfo(data.allPeople.pageInfo);
     }
   }, [data]);
 
-  // if (fetching && !data) return <p>Loading...</p>;
-  // if (error) return <p>Oh no... {error.message}</p>;
-
   const loadMore = () => {
-    if (asyncData.pageInfo.hasNextPage) {
-      setCursor(asyncData.pageInfo.endCursor ?? null);
-    }
-  };
-  const loadMoreQuery = () => {
-    if (data?.allPeople?.pageInfo.hasNextPage) {
-      setCursor(data?.allPeople?.pageInfo?.endCursor ?? null);
+    if (pageInfo.hasNextPage) {
+      setCursor(pageInfo.endCursor ?? null);
     }
   };
 
-  return { people, loadMore, loadMoreQuery, fetching, error, data };
-}
+  return { people, pageInfo, loadMore, fetching };
+};
+
+const HomePage = () => {
+  const asyncData = useLoaderData() as LoaderPeopleData;
+  console.log(asyncData);
+
+  return (
+    <div className="container mx-auto mt-8">
+      <Suspense fallback={<p>Loading...</p>}>
+        <Await resolve={asyncData}>
+          <HomeCard />
+        </Await>
+      </Suspense>
+    </div>
+  );
+};
+
 function HomeCard() {
-  const asyncData = useAsyncValue() as { people: People[]; pageInfo: PageInfo };
-
-  const { people, loadMore, loadMoreQuery, fetching, error, data } =
-    useHomeCardData(asyncData);
+  const asyncData = useAsyncValue() as LoaderPeopleData;
+  const { people, pageInfo, loadMore, fetching } = useHomeCard(asyncData);
 
   return (
     <div>
       <Card>
         <CardHeader>
-          <CardTitle>People {people.length} displayed</CardTitle>
+          <CardTitle>
+            People {people.length} displayed / {asyncData.totalCount} total
+          </CardTitle>
         </CardHeader>
         <CardContent className="grid grid-cols-3 gap-8">
           {people?.map((person: any) => (
-            <div className="flex items-center gap-4" key={person.node.id}>
+            <div className="flex items-center" key={person.node.id}>
               <Card className="w-full">
                 <CardHeader className="flex flex-row items-center space-x-4">
                   <Avatar className="hidden h-9 w-9 sm:flex">
@@ -115,12 +114,8 @@ function HomeCard() {
             </div>
           ))}
 
-          {data?.allPeople?.pageInfo?.hasNextPage && (
-            <button
-              className="bg-red-500"
-              onClick={loadMoreQuery}
-              disabled={fetching}
-            >
+          {pageInfo.hasNextPage && (
+            <button onClick={loadMore} disabled={fetching}>
               {fetching ? "Loading..." : "Load More"}
             </button>
           )}
