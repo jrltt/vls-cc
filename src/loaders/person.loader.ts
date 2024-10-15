@@ -1,14 +1,14 @@
 import { graphqlClient } from "@/lib/graphql-client";
 import { getByPersonId } from "@/queries";
+import type { Params } from "react-router-dom";
 
 export async function loadPersonById({
   params,
 }: {
-  params: { personId: string };
+  params: Params<"personId">;
 }) {
-  const { personId } = params;
   const { data } = await graphqlClient
-    .query(getByPersonId, { personId })
+    .query(getByPersonId, { personId: params.personId })
     .toPromise();
   return { data };
 }
