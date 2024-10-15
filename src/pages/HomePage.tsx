@@ -1,8 +1,8 @@
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Earth } from "lucide-react";
 import { useQuery } from "urql";
-import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
-import { CardContent } from "../components/ui/card";
+
 import { getAllPeopleQuery } from "../queries";
 
 const HomePage = () => {
