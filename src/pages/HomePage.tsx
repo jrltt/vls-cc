@@ -1,18 +1,26 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { GetAllPeopleQuery } from "@/generated/graphql";
 import { Earth } from "lucide-react";
-import { useQuery } from "urql";
+import { useLoaderData } from "react-router-dom";
 
-import { getAllPeopleQuery } from "../queries";
+type People = NonNullable<
+  NonNullable<GetAllPeopleQuery["allPeople"]>["people"]
+>;
 
 const HomePage = () => {
-  const [result] = useQuery({ query: getAllPeopleQuery });
+  // const [result] = useQuery({ query: getAllPeopleQuery });
   // console.log(result);
 
-  const { data, fetching, error } = result;
+  // const { data, fetching, error } = result;
+  const { people } = useLoaderData() as {
+    people: People[];
+  };
 
-  if (fetching) return <p>Loading...</p>;
-  if (error) return <p>Oh no... {error.message}</p>;
+  console.log(people);
+
+  // if (fetching) return <p>Loading...</p>;
+  // if (error) return <p>Oh no... {error.message}</p>;
 
   return (
     <div className="container mx-auto">
@@ -31,7 +39,7 @@ const HomePage = () => {
             <CardTitle>People</CardTitle>
           </CardHeader>
           <CardContent className="grid grid-cols-3 gap-8">
-            {data.allPeople?.people.map((person: any) => (
+            {people?.map((person: any) => (
               <div className="flex items-center gap-4" key={person.id}>
                 <Card className="w-full">
                   <CardHeader className="flex flex-row items-center space-x-4">
@@ -46,9 +54,9 @@ const HomePage = () => {
                     <div>
                       <p className="text-base font-medium leading-none flex items-center">
                         {person.name}
-                        <pre className="bg-orange-300 p-1 ml-2 rounded-md text-xs text-orange-900">
+                        <span className="bg-orange-300 p-1 ml-2 rounded-md text-xs text-orange-900">
                           {person.id}
-                        </pre>
+                        </span>
                       </p>
                       <p className="text-sm text-muted-foreground">
                         {person?.gender}
