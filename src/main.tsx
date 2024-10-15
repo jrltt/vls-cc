@@ -1,3 +1,5 @@
+import { loadAllPeople } from "@/loaders/people.loader";
+import { loadPersonById } from "@/loaders/person.loader";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -15,17 +17,12 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <HomePage />,
+    loader: loadAllPeople,
   },
   {
     path: "/person/:personId",
     element: <PersonPage />,
-    loader: async ({ params }) => {
-      const { personId } = params;
-      const { data } = await client
-        .query(getByPersonId, { personId })
-        .toPromise();
-      return { data };
-    },
+    loader: loadPersonById,
   },
 ]);
 
