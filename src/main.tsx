@@ -1,15 +1,13 @@
 import { graphqlClient } from "@/lib/graphql-client";
 import { loadAllPeople } from "@/loaders/people.loader";
 import { loadPersonById } from "@/loaders/person.loader";
+import HomePage from "@/pages/HomePage";
+import PersonPage from "@/pages/PersonPage";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Provider } from "urql";
 import "./index.css";
-import HomePage from "./pages/HomePage";
-import PersonPage from "./pages/PersonPage";
-import { getByPersonId } from "./queries";
-
 
 const router = createBrowserRouter([
   {
