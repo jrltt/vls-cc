@@ -12,7 +12,7 @@ export function usePeopleData(asyncData: LoaderPeopleData) {
     pause: !cursor,
     query: getAllPeopleQueryPaginated,
     variables: {
-      first: 3,
+      first: 9,
       after: cursor,
     },
   });
