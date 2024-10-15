@@ -1,11 +1,9 @@
 import { GetAllPeopleQuery } from "@/generated/graphql";
-import { graphqlClient } from "../lib/graphql-client";
-import { getAllPeopleQuery } from "../queries";
+import { graphqlClient } from "@/lib/graphql-client";
+import { getAllPeopleQuery } from "@/queries";
+import { defer } from "react-router-dom";
 
 type AllPeople = Pick<GetAllPeopleQuery, "allPeople">;
-type People = NonNullable<
-  NonNullable<GetAllPeopleQuery["allPeople"]>["people"]
->;
 
 export async function loadAllPeople() {
   const { data } = await graphqlClient
@@ -13,6 +11,7 @@ export async function loadAllPeople() {
     .toPromise();
 
   const { allPeople } = data as AllPeople;
+  const people = allPeople?.people ?? {};
 
-  return { people: allPeople?.people } as { people: People };
+  return defer({ people });
 }
