@@ -34,10 +34,6 @@ describe("Use people data hook", () => {
       { wrapper }
     );
 
-    // act(() => {
-    //   console.log(result.current.people);
-    // });
-
     expect(result.current.people).toEqual([]);
   });
 });
