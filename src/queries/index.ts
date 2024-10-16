@@ -41,6 +41,12 @@ export const getByPersonId = gql`
             producers
             title
             releaseDate
+            planetConnection {
+              totalCount
+              planets {
+                surfaceWater
+              }
+            }
           }
         }
       }
