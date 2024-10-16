@@ -27,6 +27,11 @@ export const getByPersonId = gql`
     person(id: $personId) {
       name
       birthYear
+      gender
+      homeworld {
+        name
+      }
+      id
       species {
         averageHeight
       }
