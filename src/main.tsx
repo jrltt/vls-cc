@@ -1,3 +1,4 @@
+import { Layout } from "@/components/layout.component";
 import { graphqlClient } from "@/lib/graphql-client";
 import { loadAllPeople } from "@/loaders/people.loader";
 import { loadPersonById } from "@/loaders/person.loader";
@@ -12,12 +13,20 @@ import "./index.css";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <HomePage />,
+    element: (
+      <Layout>
+        <HomePage />
+      </Layout>
+    ),
     loader: loadAllPeople,
   },
   {
     path: "/person/:personId",
-    element: <PersonPage />,
+    element: (
+      <Layout>
+        <PersonPage />
+      </Layout>
+    ),
     loader: loadPersonById,
   },
 ]);
