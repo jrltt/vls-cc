@@ -1,13 +1,15 @@
-import { FilmConnection, PageInfo, Planets } from "@/interfaces";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { FilmConnection, FilmNodes, PageInfo, Planets } from "@/interfaces";
 import { getByPersonId } from "@/queries";
+import { Clapperboard, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Fragment } from "react/jsx-runtime";
 import { useQuery } from "urql";
+import { Skeleton } from "./ui/skeleton";
 
 function checkPlanetsWithoutWater(planets: Planets) {
   const total = planets?.filter((item) => item?.surfaceWater === 0);
-
   return total && total.length > 0 ? total.length : "None";
 }
 
@@ -17,70 +19,93 @@ export function Films({
   personFilms: NonNullable<FilmConnection>;
 }) {
   const { personId } = useParams() as { personId: string };
-  const [films, setFilms] = useState<any[]>(personFilms.edges ?? []);
+
+  const [films, setFilms] = useState<FilmNodes[]>(
+    personFilms.edges?.map((edge) => edge?.node) ?? []
+  );
   const [pageInfo, setPageInfo] = useState<PageInfo>(personFilms.pageInfo);
-  const [cursor, setCursor] = useState<string | null>(null);
-  const [variables, setVariables] = useState({
-    personId,
-    first: 1,
-    after: pageInfo?.endCursor ?? null,
-  });
+  const [cursor, setCursor] = useState<string | null>(
+    pageInfo?.endCursor ?? null
+  );
+  const [shouldLoadMore, setShouldLoadMore] = useState(false);
 
   const [{ data, fetching, error }] = useQuery({
-    pause: !cursor,
+    pause: !shouldLoadMore,
     query: getByPersonId,
-    variables,
+    variables: {
+      personId,
+      first: 1,
+      after: cursor,
+    },
   });
 
   useEffect(() => {
     if (data && data.person && data.person.filmConnection) {
-      console.log(
-        "data.person.filmConnection.edges",
-        data.person.filmConnection.edges
-      );
-
       setFilms((prevFilms) => [
         ...prevFilms,
-        ...data.person.filmConnection.edges.map(
-          (edge: { node: any }) => edge.node
-        ),
+        ...data.person.filmConnection.edges.map((edge: any) => edge.node),
       ]);
-      setCursor(data.person.filmConnection.pageInfo.endCursor); // Update cursor for next page
+
+      setCursor(data.person.filmConnection.pageInfo.endCursor);
+      setPageInfo(data.person.filmConnection.pageInfo);
+      setShouldLoadMore(false);
     }
   }, [data]);
 
   const loadMoreFilms = () => {
     if (pageInfo.hasNextPage) {
-      setCursor(pageInfo.endCursor ?? null);
+      setShouldLoadMore(true);
     }
-    setVariables((prev) => ({
-      ...prev,
-      after: cursor, // Pass the updated cursor for the next page
-    }));
   };
 
   return (
     <div>
-      <h3>Films (total: {personFilms?.totalCount})</h3>
-      {films?.map((item, idx) => (
-        <Fragment key={idx}>
-          Title: {item?.node?.title}
-          <ul className="list-disc list-inside">
-            <li>Release date: {item?.node?.releaseDate}</li>
-            <li>Total planets: {item?.node?.planetConnection?.totalCount}</li>
-            <li>
-              Total planets without water:
-              {checkPlanetsWithoutWater(item?.node?.planetConnection?.planets)}
-            </li>
-          </ul>
-        </Fragment>
-      ))}
+      <Card>
+        <CardHeader>
+          <h6 className="font-bold flex items-center">
+            <Clapperboard className="mr-2" />
+            Films total: {personFilms?.totalCount}
+          </h6>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {films?.map((item, idx) => (
+            <div className="w-72" key={idx}>
+              <p>Title: {item?.title}</p>
+              <ul className="list-disc list-inside">
+                <li>Release date: {item?.releaseDate}</li>
+                <li>Total planets: {item?.planetConnection?.totalCount}</li>
+                <li>
+                  Total planets without water:{" "}
+                  {checkPlanetsWithoutWater(item?.planetConnection?.planets)}
+                </li>
+              </ul>
+            </div>
+          ))}
+          {fetching && (
+            <>
+              <Skeleton className="h-4 w-[210px]" />
+              <Skeleton className="h-4 w-[60px]" />
+              <Skeleton className="h-4 w-[90px]" />
+              <Skeleton className="h-4 w-[120px]" />
+            </>
+          )}
+          {pageInfo?.hasNextPage && (
+            <div className="col-span-full inline-flex items-center justify-center">
+              <Button onClick={loadMoreFilms} disabled={fetching}>
+                {fetching && (
+                  <>
+                    <Loader2 className="animate-spin mr-2" size={16} />
+                    Loading...
+                  </>
+                )}
+                {!fetching && "Load More"}
+              </Button>
+            </div>
+          )}
 
-      {pageInfo?.hasNextPage && (
-        <button onClick={loadMoreFilms}>Load More Films</button>
-      )}
-
-      {fetching && cursor && <p>Loading more films...</p>}
+          {error && <p>Error loading more films: {error.message}</p>}
+        </CardContent>
+      </Card>
     </div>
   );
 }
