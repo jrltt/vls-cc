@@ -1,20 +1,5 @@
 import { gql } from "urql";
 
-export const getAllPeopleQuery = gql`
-  query GetAllPeople {
-    allPeople {
-      people {
-        id
-        name
-        gender
-        homeworld {
-          name
-        }
-      }
-    }
-  }
-`;
-
 export const getAllPeopleQueryPaginated = gql`
   query GetAllPeoplePaginated($first: Int!, $after: String) {
     allPeople(first: $first, after: $after) {
