@@ -23,7 +23,7 @@ export const getAllPeopleQueryPaginated = gql`
 `;
 
 export const getByPersonId = gql`
-  query GetPersonById($personId: ID!) {
+  query GetPersonById($personId: ID!, $first: Int!, $after: String) {
     person(id: $personId) {
       name
       birthYear
@@ -35,7 +35,7 @@ export const getByPersonId = gql`
       species {
         averageHeight
       }
-      filmConnection {
+      filmConnection(first: $first, after: $after) {
         edges {
           node {
             producers
@@ -49,6 +49,11 @@ export const getByPersonId = gql`
             }
           }
         }
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
+        totalCount
       }
     }
   }

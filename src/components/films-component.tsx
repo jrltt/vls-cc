@@ -10,8 +10,8 @@ function checkPlanetsWithoutWater(planets: Planets) {
 export function Films({ data }: { data: NonNullable<FilmConnection> }) {
   return (
     <div>
-      <h3>Films:</h3>
-      {data.map((item, idx) => (
+      <h3>Films (total: {data.totalCount})</h3>
+      {data.edges?.map((item, idx) => (
         <Fragment key={idx}>
           Title: {item?.node?.title}
           <ul className="list-disc list-inside">

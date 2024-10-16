@@ -17,11 +17,13 @@ export type PageInfo = NonNullable<
 
 export type FilmConnection = NonNullable<
   NonNullable<GetPersonByIdQuery["person"]>["filmConnection"]
->["edges"];
+>;
 
 export type Planets = NonNullable<
   NonNullable<
-    NonNullable<NonNullable<FilmConnection>[number]>["node"]
+    NonNullable<
+      NonNullable<NonNullable<FilmConnection>["edges"]>[number]
+    >["node"]
   >["planetConnection"]
 >["planets"];
 

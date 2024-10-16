@@ -8,7 +8,7 @@ export async function loadPersonById({
   params: Params<"personId">;
 }) {
   const { data } = await graphqlClient
-    .query(getByPersonId, { personId: params.personId })
+    .query(getByPersonId, { personId: params.personId, first: 1, after: null })
     .toPromise();
 
   return { data };
