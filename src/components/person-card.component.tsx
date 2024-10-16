@@ -61,7 +61,7 @@ export function PersonCard({
     <div className="flex items-center">
       <Card
         className={cn(
-          "w-full  transition-colors",
+          "w-full  transition-colors bg-white  shadow-sm",
           link && "hover:border-yellow-700 hover:bg-yellow-200/10",
           !link && "border-yellow-700 bg-yellow-200/10"
         )}

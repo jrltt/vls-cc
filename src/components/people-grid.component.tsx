@@ -16,14 +16,14 @@ export function PeopleGrid() {
   if (error) return <p>Oh no... {error.message}</p>;
 
   return (
-    <div>
+    <div className="bg-gradient-to-r from-white to-slate-50">
       <Card>
         <CardHeader>
           <CardTitle>
             People displayed: {people.length} / Total: {asyncData.totalCount}
           </CardTitle>
         </CardHeader>
-        <CardContent className="grid grid-cols-3 gap-8">
+        <CardContent className="grid grid-cols-1 md:grid-cols-2 md:gap-4 lg:grid-cols-3 gap-8">
           {people?.map((person: any) => (
             <PersonCard key={person.node.id} {...person.node} link />
           ))}
