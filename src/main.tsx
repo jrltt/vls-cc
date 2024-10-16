@@ -18,6 +18,7 @@ const router = createBrowserRouter([
         <HomePage />
       </Layout>
     ),
+    errorElement: <div>Oops! Something went wrong!</div>,
     loader: loadAllPeople,
   },
   {
@@ -27,6 +28,7 @@ const router = createBrowserRouter([
         <PersonPage />
       </Layout>
     ),
+    errorElement: <div>Oops! Something went wrong!</div>,
     loader: loadPersonById,
   },
 ]);
