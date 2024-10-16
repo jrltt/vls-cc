@@ -10,5 +10,6 @@ export async function loadPersonById({
   const { data } = await graphqlClient
     .query(getByPersonId, { personId: params.personId })
     .toPromise();
+
   return { data };
 }

@@ -2,7 +2,6 @@ import { GetAllPeoplePaginatedQuery } from "@/generated/graphql";
 import type { AllPeople, PageInfo } from "@/interfaces";
 import { graphqlClient } from "@/lib/graphql-client";
 import { getAllPeopleQueryPaginated } from "@/queries";
-import { defer } from "react-router-dom";
 
 export async function loadAllPeople() {
   const { data } = await graphqlClient
@@ -17,5 +16,5 @@ export async function loadAllPeople() {
   const totalCount = allPeople?.totalCount ?? 0;
   const people = allPeople?.edges ?? {};
 
-  return defer({ people, pageInfo, totalCount });
+  return { people, pageInfo, totalCount };
 }
