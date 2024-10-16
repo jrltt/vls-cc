@@ -1,6 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { PersonNode } from "@/interfaces";
+import { cn } from "@/lib/utils";
 import { CircleArrowOutUpRightIcon, Earth } from "lucide-react";
 import { ReactNode } from "react";
 import { Link } from "react-router-dom";
@@ -58,7 +59,13 @@ export function PersonCard({
 }: Props) {
   return (
     <div className="flex items-center">
-      <Card className="w-full hover:border-yellow-700 hover:bg-yellow-200/10 transition-colors">
+      <Card
+        className={cn(
+          "w-full  transition-colors",
+          link && "hover:border-yellow-700 hover:bg-yellow-200/10",
+          !link && "border-yellow-700 bg-yellow-200/10"
+        )}
+      >
         {link && (
           <Link to={`/person/${id}`}>
             <PersonContent {...{ id, name, gender, homeworld, children }} />
