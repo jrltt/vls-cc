@@ -32,11 +32,8 @@ function countProducers(person: Person): ProducerCount[] {
 }
 
 export function Person({ data }: { data: Person }) {
-  // FIXME data.person?.filmConnection?.edges add pagination
-  // and reduce count producers "how many times"
-  console.log(data);
   const producers = countProducers(data);
-  console.log(producers);
+
   return (
     <>
       <PersonCard
