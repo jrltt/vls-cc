@@ -15,15 +15,13 @@ export type PageInfo = NonNullable<
   NonNullable<GetAllPeoplePaginatedQuery["allPeople"]>["pageInfo"]
 >;
 
+export type FilmConnection = NonNullable<
+  NonNullable<GetPersonByIdQuery["person"]>["filmConnection"]
+>["edges"];
+
 export type Planets = NonNullable<
   NonNullable<
-    NonNullable<
-      NonNullable<
-        NonNullable<
-          NonNullable<GetPersonByIdQuery["person"]>["filmConnection"]
-        >["edges"]
-      >[number]
-    >["node"]
+    NonNullable<NonNullable<FilmConnection>[number]>["node"]
   >["planetConnection"]
 >["planets"];
 
