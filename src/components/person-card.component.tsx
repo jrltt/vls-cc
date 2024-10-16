@@ -2,48 +2,71 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { PersonNode } from "@/interfaces";
 import { CircleArrowOutUpRightIcon, Earth } from "lucide-react";
+import { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { Skeleton } from "./ui/skeleton";
 
 type Props = Pick<NonNullable<PersonNode>, "id" | "name" | "gender"> & {
   homeworld?: { name: string };
-};
-export function PersonCard({ id, name, gender, homeworld }: Props) {
+} & { link?: boolean; children?: ReactNode };
+
+function PersonContent({ id, name, gender, homeworld, children }: Props) {
+  return (
+    <>
+      <CardHeader className="flex flex-row items-center space-x-4">
+        <Avatar className="hidden h-9 w-9 sm:flex">
+          <AvatarImage
+            className="object-cover"
+            src={`/avatars/${id}.webp`}
+            alt="Avatar"
+          />
+          <AvatarFallback>OM</AvatarFallback>
+        </Avatar>
+        <div className="flex w-full">
+          <div className="flex flex-col">
+            <p className="text-base font-medium leading-none flex items-center">
+              {name}
+              <span className="bg-orange-300 p-1 ml-2 rounded-md text-xs text-orange-900">
+                {id}
+              </span>
+            </p>
+            <p className="text-sm text-muted-foreground">{gender}</p>
+          </div>
+          <div className="ml-auto">
+            <CircleArrowOutUpRightIcon className="w-5 h-5 text-slate-400 hover:text-yellow-700 hover:rotate-[45deg] transition" />
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <div className="ml-auto font-medium text-sm flex items-center">
+          <Earth className="w-4 h-4 mr-2" />
+          {homeworld?.name}
+        </div>
+      </CardContent>
+      {children ? children : null}
+    </>
+  );
+}
+
+export function PersonCard({
+  id,
+  name,
+  gender,
+  homeworld,
+  link,
+  children,
+}: Props) {
   return (
     <div className="flex items-center">
       <Card className="w-full hover:border-yellow-700 hover:bg-yellow-200/10 transition-colors">
-        <Link to={`/person/${id}`}>
-          <CardHeader className="flex flex-row items-center space-x-4">
-            <Avatar className="hidden h-9 w-9 sm:flex">
-              <AvatarImage
-                className="object-cover"
-                src={`/avatars/${id}.webp`}
-                alt="Avatar"
-              />
-              <AvatarFallback>OM</AvatarFallback>
-            </Avatar>
-            <div className="flex w-full">
-              <div className="flex flex-col">
-                <p className="text-base font-medium leading-none flex items-center">
-                  {name}
-                  {/* <span className="bg-orange-300 p-1 ml-2 rounded-md text-xs text-orange-900">
-                  {id}
-                </span> */}
-                </p>
-                <p className="text-sm text-muted-foreground">{gender}</p>
-              </div>
-              <div className="ml-auto">
-                <CircleArrowOutUpRightIcon className="w-5 h-5 text-slate-400 hover:text-yellow-700 hover:rotate-[45deg] transition" />
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="ml-auto font-medium text-sm flex items-center">
-              <Earth className="w-4 h-4 mr-2" />
-              {homeworld?.name}
-            </div>
-          </CardContent>
-        </Link>
+        {link && (
+          <Link to={`/person/${id}`}>
+            <PersonContent {...{ id, name, gender, homeworld, children }} />
+          </Link>
+        )}
+        {!link && (
+          <PersonContent {...{ id, name, gender, homeworld, children }} />
+        )}
       </Card>
     </div>
   );

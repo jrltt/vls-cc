@@ -20,12 +20,12 @@ export function PeopleGrid() {
       <Card>
         <CardHeader>
           <CardTitle>
-            People {people.length} displayed / {asyncData.totalCount} total
+            People displayed: {people.length} / Total: {asyncData.totalCount}
           </CardTitle>
         </CardHeader>
         <CardContent className="grid grid-cols-3 gap-8">
           {people?.map((person: any) => (
-            <PersonCard key={person.node.id} {...person.node} />
+            <PersonCard key={person.node.id} {...person.node} link />
           ))}
           {fetching && (
             <>
