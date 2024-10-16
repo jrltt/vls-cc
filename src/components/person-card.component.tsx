@@ -21,7 +21,13 @@ function PersonContent({ id, name, gender, homeworld, children }: Props) {
             src={`/avatars/${id}.webp`}
             alt="Avatar"
           />
-          <AvatarFallback>OM</AvatarFallback>
+          <AvatarFallback>
+            {name
+              ?.split(" ")
+              .slice(0, 2)
+              .map((n) => n[0])
+              .join("")}
+          </AvatarFallback>
         </Avatar>
         <div className="flex w-full">
           <div className="flex flex-col">
