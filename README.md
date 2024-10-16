@@ -1,5 +1,7 @@
 # vls code challenge
 
+Live view: [https://vls-cc.vercel.app/](https://vls-cc.vercel.app/)
+
 ## Requirements
 
 - List all people from the Star Wars API, each person linked to their detailed page.
@@ -27,8 +29,10 @@
 - Cover all error states
 - Implement Eslint check correctly
 
+## Assessment detail description
+
 <details>
-  
+
 <summary>Click here</summary>
   
   # Code Test
