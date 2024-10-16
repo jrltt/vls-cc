@@ -19,12 +19,12 @@ export type FilmConnection = NonNullable<
   NonNullable<GetPersonByIdQuery["person"]>["filmConnection"]
 >;
 
+export type PersonFilmEdges = NonNullable<NonNullable<FilmConnection>["edges"]>;
+
+export type FilmNodes = NonNullable<PersonFilmEdges[number]>["node"];
+
 export type Planets = NonNullable<
-  NonNullable<
-    NonNullable<
-      NonNullable<NonNullable<FilmConnection>["edges"]>[number]
-    >["node"]
-  >["planetConnection"]
+  NonNullable<FilmNodes>["planetConnection"]
 >["planets"];
 
 export type LoaderPeopleData = {
