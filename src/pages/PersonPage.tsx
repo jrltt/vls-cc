@@ -20,7 +20,7 @@ const PersonPage = () => {
       <Person {...{ data: person }} />
       <Films
         {...{
-          data: person?.filmConnection as NonNullable<FilmConnection>,
+          personFilms: person?.filmConnection as NonNullable<FilmConnection>,
         }}
       />
     </>
